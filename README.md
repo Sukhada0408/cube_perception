@@ -18,7 +18,7 @@ The cube position is set by the user, so it serves as ground truth for measuring
 | `synthetic_camera` | `cube_perception` | Renders a coloured square (top view of a cube) from known ground-truth position; publishes `Image` and `CameraInfo` |
 | `static_transform_publisher` | `tf2_ros` | Publishes `base_link -> camera_optical_frame` (camera above the table, optical axis pointing down) |
 | `object_detector` | `cube_perception` | Segments the cube, back-projects the centroid, transforms it into `base_link`, publishes `/object_pose` |
-| planner client | `TODO: package name` | Subscribes to `/object_pose`, adds a pre-grasp offset, plans and executes |
+| planner client | `ur_planner_client` | Subscribes to `/object_pose`, adds a pre-grasp offset, plans and executes |
 
 ### How the detector works
 
