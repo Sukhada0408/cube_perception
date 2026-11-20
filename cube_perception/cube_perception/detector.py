@@ -31,7 +31,7 @@ class Detector(Node):
         self.listener = tf2_ros.TransformListener(self.buffer, self)
 
         # subscribers for /camera/camera_info -> self.info_cb
-        #                 /camera/image_raw  -> self.image_cb
+        # /camera/image_raw  -> self.image_cb
         self.cam_sub = self.create_subscription(
             CameraInfo,
             '/camera/camera_info',
@@ -67,9 +67,9 @@ class Detector(Node):
         cy = self.K[5]
 
         # segmentation
-        #   - ROS Image -> OpenCV BGR (cv_bridge)
-        #   - BGR -> HSV, then cv2.inRange with the parameter thresholds
-        #   - morphological opening to remove speckle
+        # ros Image -> OpenCV BGR (cv_bridge)
+        # bgr -> hsv, then cv2.inRange with the parameter thresholds
+        # morphological opening to remove speckle
         self.hsv_lo = np.array(self.get_parameter('hsv_lo').value, dtype=np.uint8)
         self.hsv_hi = np.array(self.get_parameter('hsv_hi').value, dtype=np.uint8)
 
@@ -98,14 +98,14 @@ class Detector(Node):
             return
         
         # back-projection to the camera frame
-        #   - Z = camera height in base_link - object_top_z
-        #   - X = (u - cx) * Z / fx ; Y = (v - cy) * Z / fy
-        #   - package as PointStamped (header = msg.header)
+        # Z = camera height in base_link - object_top_z
+        # X = (u - cx) * Z / fx ; Y = (v - cy) * Z / fy
+        # package as PointStamped (header = msg.header)
 
         source = msg.header.frame_id
         self.object_top_z = self.get_parameter('object_top_z').value
 
-        # Wrap in try/except tf2_ros.TransformException, log a throttled warning on failure
+        # log warning on failure
         try:
             tf_cam = self.buffer.lookup_transform('base_link', source, Time())
             Z = tf_cam.transform.translation.z - self.object_top_z

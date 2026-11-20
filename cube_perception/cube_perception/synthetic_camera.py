@@ -15,13 +15,13 @@ class SyntheticCamera(Node):
     def __init__(self):
         super().__init__('synthetic_camera')
 
-        # Set default cube position
+        # set default cube position
         self.declare_parameter('cube_x', 0.45)
         self.declare_parameter('cube_y', 0.10)
         self.declare_parameter('cube_size', 0.05)
         self.declare_parameter('cube_top_z', 0.05)
 
-        # Set default camera position and pixel intensity
+        # set default camera position and pixel intensity
         self.declare_parameter('cam_x', 0.40)
         self.declare_parameter('cam_y', 0.0)
         self.declare_parameter('cam_z', 0.80)
@@ -45,13 +45,13 @@ class SyntheticCamera(Node):
         self.timer = self.create_timer(0.1, self.tick)
 
     def tick(self):
-        # Get current cube dimensions
+        # get current cube dimensions
         cube_x = self.get_parameter('cube_x').value
         cube_y = self.get_parameter('cube_y').value
         cube_size = self.get_parameter('cube_size').value
         cube_top_z = self.get_parameter('cube_top_z').value
 
-        # Get current camera position
+        # get current camera position
         cam_x = self.get_parameter('cam_x').value
         cam_y = self.get_parameter('cam_y').value
         cam_z = self.get_parameter('cam_z').value
@@ -59,9 +59,9 @@ class SyntheticCamera(Node):
 
 
         # project the cube's top-face centre from base_link into pixels (u, v)
-        #   - depth = cam_z - cube_top_z
-        #   - express the cube position relative to the camera, in optical-frame axes
-        #   - apply the pinhole model: u = fx * x / depth + cx, etc.
+        # depth = cam_z - cube_top_z
+        # express the cube position relative to the camera, in optical-frame axes
+        # apply the pinhole model: u = fx * x / depth + cx, etc.
 
         depth = cam_z - cube_top_z
         
@@ -76,9 +76,9 @@ class SyntheticCamera(Node):
         half_width = 0.5*self.fx*cube_size/depth
 
         # render the image
-        #   - grey background (self.h x self.w x 3, uint8)
-        #   - green filled square at (u, v)
-        #   - gaussian noise with noise_sigma (careful with uint8 overflow!)
+        # grey background (self.h x self.w x 3, uint8)
+        # green filled square at (u, v)
+        # gaussian noise with noise_sigma (careful with uint8 overflow!)
         img = np.full((self.h, self.w, 3), 120, np.uint8)
         cv2.rectangle(img, (int(u - half_width), int(v - half_width)),
                       (int(u + half_width), int(v + half_width)), (0, 200, 0), -1)
