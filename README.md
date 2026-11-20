@@ -4,21 +4,20 @@ A small ROS 2 pipeline that detects a coloured cube in a top-down camera image, 
 
 ## Goal
 
-Show the full chain from pixels to robot motion, with a measured accuracy number for the perception part:
+Demonstrate the full chain from pixels to robot motion:
 
 ```
 image -> detect -> pose in robot frame -> plan -> move
 ```
 
-The cube position is set by the user, so it serves as ground truth for measuring the detector. This is the kind of validation a real camera setup would need motion capture for.
-
+The cube position is set by the user, so it serves as ground truth for measuring the detector. 
 
 | Node | Package | Role |
 |---|---|---|
 | `synthetic_camera` | `cube_perception` | Renders a coloured square (top view of a cube) from known ground-truth position; publishes `Image` and `CameraInfo` |
 | `static_transform_publisher` | `tf2_ros` | Publishes `base_link -> camera_optical_frame` (camera above the table, optical axis pointing down) |
 | `object_detector` | `cube_perception` | Segments the cube, back-projects the centroid, transforms it into `base_link`, publishes `/object_pose` |
-| planner client | `ur_planner_client` | Subscribes to `/object_pose`, adds a pre-grasp offset, plans and executes |
+| `planner client` | `ur_planner_client` | Subscribes to `/object_pose`, adds a pre-grasp offset, plans and executes |
 
 ### How the detector works
 
