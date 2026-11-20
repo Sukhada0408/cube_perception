@@ -40,7 +40,7 @@ The cube position is set by the user, so it serves as ground truth for measuring
 
 ## Limitations
 
-- No real sensor noise, lens distortion, lighting variation or calibration error; the reported accuracy is a best case for the geometry.
+- No real sensor noise, lens distortion, lighting variation or calibration error
 - Depth equals camera height minus `object_top_z`, which is valid only when the optical axis is perpendicular to the table. A tilted camera needs a ray-plane intersection instead.
 - Real perspective shows the side faces slightly and biases the centroid off-axis.
 - z is not measured; it comes from a parameter.
